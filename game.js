@@ -3,9 +3,95 @@ class Demo1 extends AdventureScene {
         super("demo1", "First Room");
     }
 
+    preload() {
+        this.load.path = 'assets/';
+        this.load.image('portalScene', 'PortalScene.png');
+        this.load.image('wizardGirl', 'WizardGirl.png');
+        this.load.image('leftArrow', 'leftArrow.png');
+        this.load.image('rightArrow', 'rightArrow.png');
+        this.load.image('upArrow', 'upArrow.png');
+        this.load.image('downArrow', 'downArrow.png');
+    }
+
     onEnter() {
 
-        let clip = this.add.text(this.w * 0.3, this.w * 0.3, "📎 paperclip")
+        this.portalBackground = this.add.image(880, 600, 'portalScene');
+        this.portalBackground.setScale(0.7);
+
+        this.startingText = this.add.text(600, 950, "Click Anywhere to Start...", {
+            fontFamily: "labyrinth",
+            fontSize: "50px",
+            color: "#8d7e81"}
+        );
+        this.startingText.setDepth(1);
+
+        this.input.once('pointerdown', () => {
+            this.startingText.destroy();
+            this.wizardGirl = this.add.image(510, 720, 'wizardGirl');
+            this.wizardGirl.setScale(0.4);
+            this.startingText = this.add.text(550, 950, "\"Hello, Jawan. I hope you recieved the mission brief.\"", {
+            fontFamily: "labyrinth",
+            fontSize: "50px",
+            color: "#9e9fe5"}
+        );
+        this.incomingThoughtsTween();
+            
+            this.input.once('pointerdown', () => {
+                this.startingText.destroy();
+                this.startingText = this.add.text(1180, 950, "...What is she talking about?", {
+                fontFamily: "labyrinth",
+                fontSize: "50px",
+                color: "#cba9d6"}
+
+            );
+            this.incomingThoughtsTween();
+
+                this.input.once('pointerdown', () => {
+                    this.startingText.destroy();
+                    this.startingText = this.add.text(550, 950, "\"Once you return, you cannot go back.\"", {
+                    fontFamily: "labyrinth",
+                    fontSize: "50px",
+                    color: "#9e9fe5"}
+                );
+                this.incomingThoughtsTween();
+                    
+                    this.input.once('pointerdown', () => {
+                        this.startingText.destroy();
+                        this.startingText = this.add.text(550, 950, "\"If you're successful, your payment will be generous.\"\"", {
+                        fontFamily: "labyrinth",
+                        fontSize: "50px",
+                        color: "#9e9fe5"}
+                    );
+                    this.incomingThoughtsTween();
+                        
+                        this.input.once('pointerdown', () => {
+                            this.startingText.destroy();
+                            this.startingText = this.add.text(1180, 950, "\"Payment? ...Say less.\"", {
+                            fontFamily: "labyrinth",
+                            fontSize: "50px",
+                            color: "#cba9d6"}
+                        );
+                        this.incomingThoughtsTween();
+                            
+                            this.input.once('pointerdown', () => {
+                                this.outgoingThoughtsTween();
+                                this.startingText.destroy();
+                                this.upArrow = this.add.image(870, 950, 'upArrow').setScale(0.4);
+                                this.upArrow.setInteractive({useHandCursor: true});
+                                this.upArrow.on('pointerover', () => {
+                                    this.showMessage("Go Forward");
+                                });  
+                            });
+
+                                
+        });              
+        });
+        });
+        });
+        });      
+
+
+        /*let clip = this.add.text(this.w * 0.3, this.w * 0.3, "📎 paperclip")
             .setFontSize(this.s * 2)
             .setInteractive()
             .on('pointerover', () => this.showMessage("Metal, bent."))
@@ -56,8 +142,24 @@ class Demo1 extends AdventureScene {
                     door.setText("🚪 unlocked door");
                     this.gotoScene('demo2');
                 }
-            })
+            }) */
 
+    }
+
+    incomingThoughtsTween() {
+        this.tweens.add({
+            targets: this.startingText,
+            alpha: { from: 0, to: 1 },
+            duration: 500
+        });
+    }
+
+    outgoingThoughtsTween() {
+        this.tweens.add({
+            targets: this.startingText,
+            alpha: { from: 1, to: 0 },
+            duration: 1000
+        });
     }
 }
 
@@ -122,10 +224,10 @@ const game = new Phaser.Game({
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        width: 1920,
+        width: 1740,
         height: 1080
     },
-    scene: [Intro, Demo1, Demo2, Outro],
+    scene: [Demo1],
     title: "Adventure Game",
 });
 
