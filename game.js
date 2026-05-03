@@ -1,6 +1,6 @@
-class Demo1 extends AdventureScene {
+class Room1 extends AdventureScene {
     constructor() {
-        super("demo1", "First Room");
+        super("room1", "First Room");
     }
 
     preload() {
@@ -15,7 +15,7 @@ class Demo1 extends AdventureScene {
 
     onEnter() {
 
-        this.portalBackground = this.add.image(880, 600, 'portalScene');
+        this.portalBackground = this.add.image(870, 600, 'portalScene');
         this.portalBackground.setScale(0.7);
 
         this.startingText = this.add.text(600, 950, "Click Anywhere to Start...", {
@@ -81,6 +81,9 @@ class Demo1 extends AdventureScene {
                                 this.upArrow.on('pointerover', () => {
                                     this.showMessage("Go Forward");
                                 });  
+                                this.upArrow.on('pointerdown', () => {
+                                    this.gotoScene('room2');
+                                });
                             });
 
                                 
@@ -140,7 +143,7 @@ class Demo1 extends AdventureScene {
                     this.loseItem("key");
                     this.showMessage("*squeak*");
                     door.setText("🚪 unlocked door");
-                    this.gotoScene('demo2');
+                    this.gotoScene('Room2');
                 }
             }) */
 
@@ -163,11 +166,20 @@ class Demo1 extends AdventureScene {
     }
 }
 
-class Demo2 extends AdventureScene {
+class Room2 extends AdventureScene {
     constructor() {
-        super("demo2", "The second room has a long name (it truly does).");
+        super("room2", "The second room has a long name (it truly does).");
     }
+
+    preload() {
+        this.load.path = 'assets/';
+        this.load.image('mainScene', 'MainScene.png');
+    }
+
     onEnter() {
+        this.mainBackground = this.add.image(870, 600, 'mainScene');
+        this.mainBackground.setScale(0.7);
+
         this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
             .setFontSize(this.s * 2)
             .setInteractive()
@@ -175,7 +187,7 @@ class Demo2 extends AdventureScene {
                 this.showMessage("You've got no other choice, really.");
             })
             .on('pointerdown', () => {
-                this.gotoScene('demo1');
+                this.gotoScene('room2return');
             });
 
         let finish = this.add.text(this.w * 0.6, this.w * 0.2, '(finish the game)')
@@ -191,6 +203,25 @@ class Demo2 extends AdventureScene {
                 });
             })
             .on('pointerdown', () => this.gotoScene('outro'));
+    }
+}
+
+class Room2Return extends AdventureScene {
+    constructor() {
+        super("room2return", "");
+    }
+
+    preload() {
+        this.load.path = 'assets/';
+        this.load.image('portalScene', 'PortalScene.png');
+        this.load.image('wizardGirl', 'WizardGirl.png');
+    }
+
+    onEnter() {
+        this.portalBackground = this.add.image(870, 600, 'portalScene');
+        this.portalBackground.setScale(0.7);
+        this.wizardGirl = this.add.image(510, 720, 'wizardGirl');
+        this.wizardGirl.setScale(0.4);
     }
 }
 
@@ -224,10 +255,10 @@ const game = new Phaser.Game({
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        width: 1740,
+        width: 1730,
         height: 1080
     },
-    scene: [Demo1],
+    scene: [Room1, Room2, Room2Return],
     title: "Adventure Game",
 });
 
