@@ -52,6 +52,7 @@ class AdventureScene extends Phaser.Scene {
         this.s = this.game.config.width * 0.01;
 
         this.inventoryImgs = [];
+        this.mapZoomed = false;
 
         this.cameras.main.setBackgroundColor('#444');
         this.cameras.main.fadeIn(this.transitionDuration, 0, 0, 0);
@@ -225,12 +226,49 @@ class AdventureScene extends Phaser.Scene {
         this.inventoryImgs = [];
 
             for (let i = 0; i < this.inventory.length; i++) {
+                if (this.inventory[i] == 'Map') {
+                    this.showMap();
+                }
+                else {
                 let slot = this.add.image(this.w * 0.055 + (slotCt * 10 * this.s), this.h * 0.1, 'slot').setScale(0.4);
+                slot.setInteractive({useHandCursor: true})
+                    .on('pointerover', () => this.showMessage(this.inventoryTexts[i].text))
                 let newItem = this.add.image(slot.x, slot.y, this.inventory[i]).setScale(0.075);
                 
                 this.inventoryImgs.push(slot, newItem);
+                }
         }
     } 
+
+    showMap() {
+        this.map = this.add.image(this.w * 0.945, this.h * 0.1, 'Map').setScale(0.05);
+        this.map.setInteractive({useHandCursor: true})
+            .on('pointerover', () => this.showMessage("Map"))
+            .on('pointerdown', () => {
+                if (!this.mapZoomed) {
+                this.tweens.add({
+                    targets: this.map,
+                    scale: {from: 0.05, to: 0.65 },
+                    x: {from: this.map.x, to: this.w/2},
+                    y: {from: this.map.y, to: this.h/2},
+                    duration: 100
+                });
+                this.mapZoomed = true;
+            }
+            else {
+                this.tweens.add({
+                    targets: this.map,
+                    scale: {from: 0.65, to: 0.05 },
+                    x: {from: this.map.x, to: this.w * 0.945},
+                    y: {from: this.map.y, to: this.h * 0.1},
+                    duration: 100
+                });
+                this.mapZoomed = false;
+            }
+            });
+
+            this.inventoryImgs.push(this.map);
+    }
 
     /**
      * Fade out the camera and transition to another scene by key, carrying

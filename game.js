@@ -11,6 +11,7 @@ class Room1 extends AdventureScene {
         this.load.image('rightArrow', 'rightArrow.png');
         this.load.image('upArrow', 'upArrow.png');
         this.load.image('downArrow', 'downArrow.png');
+        this.load.image('Map', 'Map.png');
     }
 
     onEnter() {
@@ -82,7 +83,32 @@ class Room1 extends AdventureScene {
                                     this.showMessage("Go Forward");
                                 });  
                                 this.upArrow.on('pointerdown', () => {
-                                    this.gotoScene('room2');
+                                    this.tweens.add({
+                                        targets: this.upArrow,
+                                        alpha: { from: 1, to: 0 },
+                                        duration: 1000
+                                    });
+                                    this.upArrow.destroy();
+                                    this.startingText.destroy();
+                                    this.startingText = this.add.text(550, 950, "\"Wait! I almost forgot...this map will prove useful.\"\"", {
+                                    fontFamily: "labyrinth",
+                                    fontSize: "50px",
+                                    color: "#9e9fe5"}
+                                    );
+
+                                    this.incomingThoughtsTween();
+                                    this.time.delayedCall(0, () => {
+                                       this.input.once('pointerdown', () => { 
+                                        this.startingText.destroy();
+                                        this.showMessage("You take the map.");
+                                        this.gainItem('Map');
+                                        this.showInventory('slot', 'Map');
+                                        this.time.delayedCall(1500, () => {
+                                        this.gotoScene('room2');
+                                        });
+                                       });
+                                    });
+                             
                                 });
                             });
 
@@ -176,7 +202,7 @@ class Room2 extends AdventureScene {
         this.load.image('mainScene', 'MainScene.png');
         this.load.image('moon', 'moon.png');
         this.load.image('arrow', 'arrow1.png');
-        this.load.image('gibbousShroom', 'gibbousShroom.png');
+        this.load.image('Gibbous Shroom', 'Gibbous Shroom.png');
         this.load.image('slot', 'inventorySlot.png');
 
     }
@@ -186,14 +212,14 @@ class Room2 extends AdventureScene {
         this.mainBackground.setScale(0.7);
 
         this.moon = this.add.image(610, 350, 'moon')
-            .setScale(0.25)
+            .setScale(0.2)
             .setInteractive()
             .on('pointerover', () => {
                 this.showMessage("A beautiful moon, perfectly mounted above the sunset.");
             });
         
-            if (!this.hasItem('gibbousShroom')) {
-                this.gibbousShroom = this.add.image(130, 1020, 'gibbousShroom')
+            if (!this.hasItem('Gibbous Shroom')) {
+                this.gibbousShroom = this.add.image(130, 1020, 'Gibbous Shroom')
                 .setScale(0.1)
                 .setInteractive({useHandCursor: true})
                 .on('pointerover', () => {
@@ -201,7 +227,7 @@ class Room2 extends AdventureScene {
                 })
                 .on('pointerdown', () => {
                     this.showMessage("You pick up the mushroom.");
-                    this.gainItem('gibbousShroom');
+                    this.gainItem('Gibbous Shroom');
                     this.tweens.add({
                         targets: this.gibbousShroom,
                         y: `-=${2 * this.s}`,
@@ -324,7 +350,7 @@ const game = new Phaser.Game({
         width: 1730,
         height: 1080
     },
-    scene: [Room2],
+    scene: [Room1, Room2],
     //scene: [Room1, Room2, Room2Return],
     title: "Adventure Game",
 });
