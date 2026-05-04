@@ -246,7 +246,7 @@ class Room2 extends AdventureScene {
             this.showMessage("End mission");
         });  
         this.backArrow.on('pointerdown', () => {
-            this.gotoScene('room2');
+            this.gotoScene('room1Return');
         });
 
         this.leftArrow = this.add.image(110, 530, 'arrow').setScale(0.3);
@@ -298,9 +298,9 @@ class Room2 extends AdventureScene {
     }
 }
 
-class Room2Return extends AdventureScene {
+class Room1Return extends AdventureScene {
     constructor() {
-        super("room2return", "");
+        super("room1Return", "");
     }
 
     preload() {
@@ -350,8 +350,7 @@ const game = new Phaser.Game({
         width: 1730,
         height: 1080
     },
-    scene: [Room1, Room2],
-    //scene: [Room1, Room2, Room2Return],
+    scene: [Room1, Room2, Room1Return],
     title: "Adventure Game",
 });
 
