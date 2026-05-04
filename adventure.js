@@ -51,6 +51,8 @@ class AdventureScene extends Phaser.Scene {
         /** @type {number} UI spacing unit in scaled pixels (1% of width). Use multiples of `this.s` for text sizes, margins, etc. */
         this.s = this.game.config.width * 0.01;
 
+        this.inventoryImgs = [];
+
         this.cameras.main.setBackgroundColor('#444');
         this.cameras.main.fadeIn(this.transitionDuration, 0, 0, 0);
 
@@ -85,6 +87,7 @@ class AdventureScene extends Phaser.Scene {
             });
 
         this.onEnter();
+        this.showInventory();
 
     }
 
@@ -94,14 +97,17 @@ class AdventureScene extends Phaser.Scene {
      *
      * @param {string} message The text to show.
      */
-    showMessage(message) {
+    showMessage(message, color, ) {
         this.messageBox.setText(message);
         this.messageBox.setDepth(1);
-        this.messageBox.setColor('#cba9d6');
+        this.messageBox.setColor('#ffc4f2');
         this.messageBox.setFontSize('50px');
         this.messageBox.setFontFamily('labyrinth');
+        this.messageBox.setAlign('right');
         this.messageBox.setX(this.w*.95 - this.messageBox.width);
-        this.messageBox.setY(950);
+        this.messageBox.setY(this.h * 0.95 - this.messageBox.height);
+        this.messageBox.setStroke('#8e669b', 8);
+        this.messageBox.setShadow(10, 0, '#969bc5', 10, true, true);
         this.tweens.add({
             targets: this.messageBox,
             alpha: { from: 1, to: 0 },
@@ -206,6 +212,25 @@ class AdventureScene extends Phaser.Scene {
             this.updateInventory();
         });
     }
+    
+    
+    /**
+     * Renders a custom hotbar inventory
+     * No params manually passed; inventory array keys must match the keys of the loaded images in preload() and slot is inventory slot img
+     */
+    showInventory() {
+        let slotCt = this.inventory.length - 1;
+
+        this.inventoryImgs.forEach(obj => obj.destroy());
+        this.inventoryImgs = [];
+
+            for (let i = 0; i < this.inventory.length; i++) {
+                let slot = this.add.image(this.w * 0.055 + (slotCt * 10 * this.s), this.h * 0.1, 'slot').setScale(0.4);
+                let newItem = this.add.image(slot.x, slot.y, this.inventory[i]).setScale(0.075);
+                
+                this.inventoryImgs.push(slot, newItem);
+        }
+    } 
 
     /**
      * Fade out the camera and transition to another scene by key, carrying
@@ -237,3 +262,5 @@ class AdventureScene extends Phaser.Scene {
         console.warn('This AdventureScene did not implement onEnter():', this.constructor.name);
     }
 }
+
+

@@ -174,13 +174,79 @@ class Room2 extends AdventureScene {
     preload() {
         this.load.path = 'assets/';
         this.load.image('mainScene', 'MainScene.png');
+        this.load.image('moon', 'moon.png');
+        this.load.image('arrow', 'arrow1.png');
+        this.load.image('gibbousShroom', 'gibbousShroom.png');
+        this.load.image('slot', 'inventorySlot.png');
+
     }
 
     onEnter() {
         this.mainBackground = this.add.image(870, 600, 'mainScene');
         this.mainBackground.setScale(0.7);
 
-        this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
+        this.moon = this.add.image(610, 350, 'moon')
+            .setScale(0.25)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage("A beautiful moon, perfectly mounted above the sunset.");
+            });
+        
+            if (!this.hasItem('gibbousShroom')) {
+                this.gibbousShroom = this.add.image(130, 1020, 'gibbousShroom')
+                .setScale(0.1)
+                .setInteractive({useHandCursor: true})
+                .on('pointerover', () => {
+                    this.showMessage("Mushrooms! I wonder if this could be used for anything...");
+                })
+                .on('pointerdown', () => {
+                    this.showMessage("You pick up the mushroom.");
+                    this.gainItem('gibbousShroom');
+                    this.tweens.add({
+                        targets: this.gibbousShroom,
+                        y: `-=${2 * this.s}`,
+                        alpha: { from: 1, to: 0 },
+                        duration: 500,
+                        onComplete: () => this.gibbousShroom.destroy()
+                    });
+                    this.showInventory();
+                });
+            }
+
+        this.backArrow = this.add.image(870, 980, 'arrow').setScale(0.3);
+        this.backArrow.setFlipY(true);
+        this.backArrow.setInteractive({useHandCursor: true});
+        this.backArrow.on('pointerover', () => {
+            this.showMessage("End mission");
+        });  
+        this.backArrow.on('pointerdown', () => {
+            this.gotoScene('room2');
+        });
+
+        this.leftArrow = this.add.image(110, 530, 'arrow').setScale(0.3);
+        this.leftArrow.setRotation(-Math.PI / 2);
+        this.leftArrow.setInteractive({useHandCursor: true});
+        this.leftArrow.on('pointerover', () => {
+            this.showMessage("Delve into the forest");
+        });  
+        this.leftArrow.on('pointerdown', () => {
+            this.gotoScene('room2');
+        });
+
+        this.forwardArrow = this.add.image(870, 110, 'arrow').setScale(0.3);
+        this.forwardArrow.setInteractive({useHandCursor: true});
+        this.forwardArrow.on('pointerover', () => {
+            this.showMessage("Go for a swim");
+        });
+
+        this.rightArrow = this.add.image(1620, 530, 'arrow').setScale(0.3);
+        this.rightArrow.setRotation(Math.PI / 2);
+        this.rightArrow.setInteractive({useHandCursor: true});
+        this.rightArrow.on('pointerover', () => {
+            this.showMessage("Explore east");
+        });
+
+        /*this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
             .setFontSize(this.s * 2)
             .setInteractive()
             .on('pointerover', () => {
@@ -202,7 +268,7 @@ class Room2 extends AdventureScene {
                     duration: 500
                 });
             })
-            .on('pointerdown', () => this.gotoScene('outro'));
+            .on('pointerdown', () => this.gotoScene('outro'));*/
     }
 }
 
@@ -258,7 +324,8 @@ const game = new Phaser.Game({
         width: 1730,
         height: 1080
     },
-    scene: [Room1, Room2, Room2Return],
+    scene: [Room2],
+    //scene: [Room1, Room2, Room2Return],
     title: "Adventure Game",
 });
 
