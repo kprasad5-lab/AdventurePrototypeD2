@@ -220,7 +220,7 @@ class AdventureScene extends Phaser.Scene {
      * No params manually passed; inventory array keys must match the keys of the loaded images in preload() and slot is inventory slot img
      */
     showInventory() {
-        let slotCt = this.inventory.length - 1;
+        let slotCt = this.inventory.length - 2;
 
         this.inventoryImgs.forEach(obj => obj.destroy());
         this.inventoryImgs = [];
