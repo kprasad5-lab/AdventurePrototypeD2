@@ -222,7 +222,10 @@ class AdventureScene extends Phaser.Scene {
     showInventory() {
         let slotCt = this.inventory.length - 2;
 
-        this.inventoryImgs.forEach(obj => obj.destroy());
+        
+        if (this.inventoryImgs) {
+             this.inventoryImgs.forEach(obj => obj.destroy());
+        }
         this.inventoryImgs = [];
 
             for (let i = 0; i < this.inventory.length; i++) {

@@ -6,7 +6,7 @@ class Room1 extends AdventureScene {
     preload() {
         this.load.path = 'assets/';
         this.load.image('portalScene', 'PortalScene.png');
-        this.load.image('wizardGirl', 'WizardGirl.png');
+        this.load.image('wizardGirl', 'Wizardgirl.png');
         this.load.image('leftArrow', 'leftArrow.png');
         this.load.image('rightArrow', 'rightArrow.png');
         this.load.image('upArrow', 'upArrow.png');
@@ -317,6 +317,33 @@ class Room1Return extends AdventureScene {
     }
 }
 
+class ForestScene extends AdventureScene {
+    constructor() {
+        super("forestScene", "The Forest");
+    }
+
+    preload() {
+        this.load.path = 'assets/';
+        this.load.image('forestScene', 'ForestScene.png');
+        this.load.image('arrow', 'arrow1.png');
+    }
+
+    onEnter() {
+        this.forestBackground = this.add.image(870, 600, 'forestScene');
+        this.forestBackground.setScale(0.7);
+
+        this.backArrow = this.add.image(870, 980, 'arrow').setScale(0.3);
+        this.backArrow.setFlipY(true);
+        this.backArrow.setInteractive({useHandCursor: true});
+        this.backArrow.on('pointerover', () => {
+            this.showMessage("Go back");
+        });
+        this.backArrow.on('pointerdown', () => {
+            this.gotoScene('room2');
+        });
+    }
+}   
+
 class Intro extends Phaser.Scene {
     constructor() {
         super('intro')
@@ -350,7 +377,7 @@ const game = new Phaser.Game({
         width: 1730,
         height: 1080
     },
-    scene: [Room1, Room2, Room1Return],
+    scene: [Room1, Room1Return,Room2],
     title: "Adventure Game",
 });
 
