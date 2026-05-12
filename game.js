@@ -102,7 +102,7 @@ class Room1 extends AdventureScene {
                                         this.startingText.destroy();
                                         this.showMessage("You take the map.");
                                         this.gainItem('Map');
-                                        this.showInventory('slot', 'Map');
+                                        this.showInventory();
                                         this.time.delayedCall(1500, () => {
                                         this.gotoScene('room2');
                                         });
@@ -199,7 +199,7 @@ class Room2 extends AdventureScene {
 
     preload() {
         this.load.path = 'assets/';
-        this.load.image('mainScene', 'MainScene.png');
+        this.load.image('mainScene', 'MainScene (1).png');
         this.load.image('moon', 'moon.png');
         this.load.image('arrow', 'arrow1.png');
         this.load.image('Gibbous Shroom', 'Gibbous Shroom.png');
@@ -256,7 +256,7 @@ class Room2 extends AdventureScene {
             this.showMessage("Delve into the forest");
         });  
         this.leftArrow.on('pointerdown', () => {
-            this.gotoScene('room2');
+            this.gotoScene('forestScene');
         });
 
         this.forwardArrow = this.add.image(870, 110, 'arrow').setScale(0.3);
@@ -264,12 +264,18 @@ class Room2 extends AdventureScene {
         this.forwardArrow.on('pointerover', () => {
             this.showMessage("Go for a swim");
         });
+        this.forwardArrow.on('pointerdown', () => {
+            this.gotoScene('underwaterScene');
+        }); 
 
         this.rightArrow = this.add.image(1620, 530, 'arrow').setScale(0.3);
         this.rightArrow.setRotation(Math.PI / 2);
         this.rightArrow.setInteractive({useHandCursor: true});
         this.rightArrow.on('pointerover', () => {
             this.showMessage("Explore east");
+        });
+        this.rightArrow.on('pointerdown', () => {
+            this.gotoScene('watersideScene');
         });
 
         /*this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
@@ -306,7 +312,7 @@ class Room1Return extends AdventureScene {
     preload() {
         this.load.path = 'assets/';
         this.load.image('portalScene', 'PortalScene.png');
-        this.load.image('wizardGirl', 'WizardGirl.png');
+        this.load.image('wizardGirl', 'Wizardgirl.png');
     }
 
     onEnter() {
@@ -332,17 +338,70 @@ class ForestScene extends AdventureScene {
         this.forestBackground = this.add.image(870, 600, 'forestScene');
         this.forestBackground.setScale(0.7);
 
-        this.backArrow = this.add.image(870, 980, 'arrow').setScale(0.3);
-        this.backArrow.setFlipY(true);
-        this.backArrow.setInteractive({useHandCursor: true});
-        this.backArrow.on('pointerover', () => {
+        this.rightArrow = this.add.image(1620, 530, 'arrow').setScale(0.3);
+        this.rightArrow.setRotation(Math.PI / 2);
+        this.rightArrow.setInteractive({useHandCursor: true});
+        this.rightArrow.on('pointerover', () => {
             this.showMessage("Go back");
         });
-        this.backArrow.on('pointerdown', () => {
+        this.rightArrow.on('pointerdown', () => {
             this.gotoScene('room2');
         });
     }
 }   
+
+class  UnderwaterScene extends AdventureScene {
+    constructor() {
+        super("underwaterScene", "Underwater");
+    }
+    preload() {
+        this.load.path = 'assets/';
+        this.load.image('underwaterScene', 'UnderwaterScene.png');
+        this.load.image('arrow', 'arrow1.png');
+    }
+
+    onEnter() {
+        this.underwaterBackground = this.add.image(870, 600, 'underwaterScene');
+        this.underwaterBackground.setScale(0.7);
+
+        this.downArrow = this.add.image(870, 980, 'arrow').setScale(0.3);
+        this.downArrow.setFlipY(true);
+        this.downArrow.setInteractive({useHandCursor: true});
+        this.downArrow.on('pointerover', () => {
+            this.showMessage("Go back");
+        });
+        this.downArrow.on('pointerdown', () => {
+            this.gotoScene('room2');
+        });
+    }
+}
+
+class WatersideScene extends AdventureScene {
+    constructor() {
+        super("watersideScene", "Waterside");
+    }
+    preload() {
+        this.load.path = 'assets/';
+        this.load.image('watersideScene', 'WatersideScene.png');
+        this.load.image('arrow', 'arrow1.png');
+    }
+    onEnter() {
+        this.watersideBackground = this.add.image(870, 600, 'watersideScene');
+        this.watersideBackground.setScale(0.7);
+
+        this.leftArrow = this.add.image(110, 530, 'arrow').setScale(0.3);
+        this.leftArrow.setRotation(-Math.PI / 2);
+        this.leftArrow.setInteractive({useHandCursor: true});
+        this.leftArrow.on('pointerover', () => {
+            this.showMessage("Go back");
+        }
+        );
+        this.leftArrow.on('pointerdown', () => {
+            this.gotoScene('room2');
+        });
+    }
+}
+
 
 class Intro extends Phaser.Scene {
     constructor() {
@@ -377,7 +436,7 @@ const game = new Phaser.Game({
         width: 1730,
         height: 1080
     },
-    scene: [Room1, Room1Return,Room2],
+    scene: [Room1, Room1Return, Room2, ForestScene, UnderwaterScene, WatersideScene],
     title: "Adventure Game",
 });
 

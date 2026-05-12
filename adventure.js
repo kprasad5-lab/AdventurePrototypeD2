@@ -143,10 +143,11 @@ class AdventureScene extends Phaser.Scene {
         let h = this.h * 0.66 + 3 * this.s;
         this.inventory.forEach((e, i) => {
             let text = this.add.text(this.w * 0.75 + 2 * this.s, h, e)
-                .setStyle({ fontSize: `${1.5 * this.s}px` })
+                /*.setStyle({ fontSize: `${1.5 * this.s}px` })
                 .setWordWrapWidth(this.w * 0.75 + 4 * this.s);
-            h += text.height + this.s;
+            h += text.height + this.s;*/
             this.inventoryTexts.push(text);
+            text.destroy();
         });
     }
 
